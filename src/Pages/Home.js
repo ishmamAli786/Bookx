@@ -9,7 +9,7 @@ const Index = () => {
   return (
           <div>
       <Header />
-      <Categories />
+      {/* <Categories /> */}
       <Products />
       <Services />
     </div>

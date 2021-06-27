@@ -1,7 +1,32 @@
-import React from 'react';
+import React,{useState} from 'react';
 import background from '../Assets/images/banner1.jpg';
+import {useDispatch,useSelector} from 'react-redux';
+import {filterByInput} from '.././store/actions/useAction';
+
 
 const Header = () => {
+    const [getCategory,setGetCateg]=useState("");
+    // const [location,setLocation]=useState("");
+    // const [category,setCategory]=useState("");
+    const [location,setLocation]=useState('');
+    const dispatch=useDispatch();
+    
+
+
+
+
+    const handleInputs=(e)=>{
+        let name=e.target.name;
+        let value=e.target.value;
+         setGetCateg({...getCategory,[name]:value});
+       }
+
+
+       const tryWorking=()=>{
+        console.log(getCategory.title+getCategory.category+getCategory.location)
+       }
+
+
     return (
 <header id="header-wrap">
 
@@ -18,34 +43,34 @@ const Header = () => {
 <form className="search-form">
 <div className="form-group inputwithicon">
 <i className="lni-tag"></i>
-<input type="text" name="customword" className="form-control" placeholder="Enter Product Keyword" />
+<input type="text" name="title" onChange={handleInputs} className="form-control" placeholder="Enter Product Keyword" />
 </div>
 <div className="form-group inputwithicon">
 <i className="lni-map-marker"></i>
 <div className="select">
-<select>
-<option value="none">Locations</option>
-<option value="none"> Faisalabad</option>
-<option value="none">Lahore</option>
-<option value="none">Multan</option>
-<option value="none">Islamabad</option>
-<option value="none">Karachi</option>
+<select onChange={handleInputs} name="location">
+<option>Locations</option>
+<option> Faislabad</option>
+<option>Lahore</option>
+<option>Multan</option>
+<option>Islamabad</option>
+<option>Karachi</option>
 </select>
 </div>
 </div>
 <div className="form-group inputwithicon">
 <i className="lni-menu"></i>
 <div className="select">
-<select>
-<option value="none">Categories</option>
-<option value="none">Notebook</option>
-<option value="none">Novel</option>
-<option value="none">Magazine</option>
-<option value="none">Lecture</option>
+<select onChange={handleInputs} name="category">
+<option>Categories</option>
+<option>TextBook</option>
+<option>Novel</option>
+<option>Magazine</option>
+<option>Lecture</option>
 </select>
 </div>
 </div>
-<button className="btn btn-common" type="button"><i className="lni-search"></i> Search Now</button>
+<button className="btn btn-common" type="button" onClick={()=>dispatch(filterByInput(getCategory))}><i className="lni-search"></i> Search Now</button>
 </form>
 </div>
 </div>

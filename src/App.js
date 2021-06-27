@@ -17,6 +17,9 @@ import MyADs from "./User-Panel/MyADs";
 import ProductDetails from "./Components/ProductDetails";
 import ImageUpload from './Components/ImageUpload';
 import Navbar from './Components/Navbar';
+import PostAds from './User-Panel/PostAds';
+import EditProduct from './User-Panel/EditProduct';
+import EditProducts from './User-Panel/EditProducts';
 
 function App() {
   return (
@@ -55,6 +58,7 @@ function App() {
           <Route exact path="/product-details">
             <ProductDetails />
           </Route>
+          <Route exact path="/editProduct/:id" component={EditProduct}></Route>
 
           <Route exact path="">
             <ErroPage />

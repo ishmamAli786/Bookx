@@ -1,7 +1,111 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import background from "../Assets/images/banner1.jpg";
+import {useHistory} from 'react-router-dom';
+import { app } from ".././config/firebase";
+
+const db = app.firestore();
 
 const PostAD = () => {
+  const history=useHistory();
+  const [fileUrl, setFileUrl] =useState(null);
+  const [title,setTitle]=useState('');
+  const [category,setCategory]=useState('');
+  const [price,setPrice]=useState('');
+  const [fullName,setFullName]=useState('');
+  const [phone,setPhone]=useState('');
+  const [desc,setDesc]=useState('');
+  const [province,setProvince]=useState('');
+  const [location,setLocation]=useState('');
+
+
+
+ 
+
+
+
+  const onFileChange = async (e) => {
+    const file = e.target.files[0];
+    const storageRef = app.storage().ref();
+    const fileRef = storageRef.child(file.name);
+    await fileRef.put(file);
+    setFileUrl(await fileRef.getDownloadURL());
+  };
+
+
+
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    const firebaseData={
+      title: title,
+      avatar: fileUrl,
+      category:category,
+      price:price,
+      fullName:fullName,
+      phone:phone,
+      desc:desc,
+      province:province,
+      location:location
+    }
+
+    try{
+      if (!title || !fileUrl || !category || !price || !fullName || !phone || !desc || !province || !location) {
+        return;
+      }else{
+        const res=await db.collection("noman").add(firebaseData);
+        console.log("res",res)
+      }
+    }
+    catch(err){
+      console.log(err)
+    }
+  };
+
+
+
+
+
+
+
+  const submitData=async (e)=>{
+    e.preventDefault();
+
+    
+    const firebaseData={
+      title: title,
+      avatar: fileUrl,
+      category:category,
+      price:price,
+      fullName:fullName,
+      phone:phone,
+      desc:desc,
+      province:province,
+      location:location
+    }
+
+
+
+    console.log(title,category,price,fullName,phone,desc,price,fileUrl,location,province)
+
+    try{
+      if (!title || !fileUrl || !category || !price || !fullName || !phone || !desc || !province || !location) {
+        return;
+      }else{
+        const res=await db.collection("noman").add(firebaseData);
+        console.log("res",res)
+        history.push('/my-ads')
+      }
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
+
+
+
+
     return (
         <>
 
@@ -29,6 +133,7 @@ const PostAD = () => {
 
 <div id="content" className="section-padding">
 <div className="container">
+
 <div className="row">
 <div className="col-sm-12 col-md-8 col-lg-12 m-auto">
 <div className="row page-content">
@@ -37,90 +142,34 @@ const PostAD = () => {
 <div className="dashboard-box">
 <h2 className="dashbord-title">Ad Detail</h2>
 </div>
-<div className="dashboard-wrapper">
-<div className="form-group mb-3">
-<label className="control-label">Product Title</label>
-<input className="form-control input-md" name="Title" placeholder="Title" type="text" />
-</div>
-<div className="form-group mb-3 tg-inputwithicon">
-<label className="control-label">Category</label>
-<div className="tg-select form-control">
-<select>
-<option value="none">Select Categories</option>
-<option value="none">NoteBook</option>
-<option value="none">Novel</option>
-<option value="none">Magazine</option>
-<option value="none">Lecture Notes</option>
-</select>
-</div>
-</div>
-<div className="form-group mb-3">
-<label className="control-label">Price</label>
-<input className="form-control input-md" name="price" placeholder="Ad your Price" type="text" />
-</div>
-<div className="form-group mb-3">
-<label className="control-label">Description</label>
-<textarea class="form-control" rows="5" id="description" placeholder="Add Details"></textarea>
-{/* <input className="form-control input-md" name="description" placeholder="Ad your Price" type="text" /> */}
-</div>
-<div className="form-group md-3">
-</div>
-<label className="tg-fileuploadlabel" for="tg-photogallery">
-<span>Drop files anywhere to upload</span>
-<span>Or</span>
-<span className="btn btn-common">Select Files</span>
-<span>Maximum upload file size: 500 KB</span>
-<input id="tg-photogallery" className="tg-fileinput" type="file" name="file" />
-</label>
-</div>
-</div>
-</div>
-<div className="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-<div className="inner-box">
-<div className="tg-contactdetail">
-<div className="dashboard-box">
-<h2 className="dashbord-title">Contact Detail</h2>
-</div>
-<div className="dashboard-wrapper">
-<div className="form-group mb-3">
-<label className="control-label">Full Name*</label>
-<input className="form-control input-md" name="name" type="text" />
-</div>
-<div className="form-group mb-3">
-<label className="control-label">Mobile Number *</label>
-<input className="form-control input-md" name="phone" type="text" />
-</div>
-<div className="form-group mb-3 tg-inputwithicon">
-<label className="control-label">Province</label>
-<div className="tg-select form-control">
-<select>
-<option value="none">Punjab</option>
-<option value="none">KPK</option>
-<option value="none">Sindh</option>
-<option value="none">Baluchistan</option>
-</select>
-</div>
-</div>
-<div className="form-group mb-3 tg-inputwithicon">
-<label className="control-label">City</label>
-<div className="tg-select form-control">
-<select>
-<option value="none">Faisalabad</option>
-<option value="none">Lahore</option>
-<option value="none">Karachi</option>
-<option value="none">Islamabad</option>
-</select>
-</div>
-</div>
-<div className="tg-checkbox">
-<div className="custom-control custom-checkbox">
-<input type="checkbox" className="custom-control-input" id="tg-agreetermsandrules" />
-<label className="custom-control-label" for="tg-agreetermsandrules">I agree to all <a href="javascript:void(0);">Terms of Use &amp; Posting Rules</a></label>
-</div>
-</div>
-<button className="btn btn-common" type="button">Post Ad</button>
-</div>
-</div>
+               <form onSubmit={submitData}>
+              <input type="text" placeholder="title" onChange={(e)=>setTitle(e.target.value)}></input>
+              <select onChange={(e)=>setCategory(e.target.value)}>
+                  <option>Category</option>
+                  <option>TextBook</option>
+                  <option>Novel</option>
+                  <option>Magazine</option>
+                  <option>Lectures</option>
+              </select>
+              <input type="text" placeholder="price" onChange={(e)=>setPrice(e.target.value)}></input>
+              <textarea placeholder="description" onChange={(e)=>setDesc(e.target.value)}></textarea>
+              <input type="file" onChange={onFileChange}></input>
+              <input type="text" placeholder="Name" onChange={(e)=>setFullName(e.target.value)}></input>
+              <input type="text" placeholder="Number" onChange={(e)=>setPhone(e.target.value)}></input>
+              <select onChange={(e)=>setProvince(e.target.value)}>
+                  <option>Province</option>
+                  <option>Punjab</option>
+                  <option>Sindh</option>
+                  <option>Balochistan</option>
+              </select>
+              <select onChange={(e)=>setLocation(e.target.value)}>
+                  <option>City</option>
+                  <option>Lahore</option>
+                  <option>Faislabad</option>
+                  <option>Kamalia</option>
+              </select>
+              <button type="submit">submit</button>
+            </form> 
 </div>
 </div>
 </div>

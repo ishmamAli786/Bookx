@@ -116,7 +116,6 @@ const MyADs = () => {
 <th>Photo</th>
 <th>Title</th>
 <th>Category</th>
-<th>Ad Status</th>
 <th>Price</th>
 <th>Action</th>
 </tr>
